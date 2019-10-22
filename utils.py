@@ -46,7 +46,7 @@ def evaluate_method(method, metrics_functions, X_train, y_train, X_test, y_test)
     model = method.fit(X_train, y_train)
     y_pred = model.predict(X_test)
     score = evaluate_functions(metrics_functions, y_test, y_pred)
-    score["número de instâncias"] = len(X_train) + len(X_test)
+    score["#"] = len(X_train) + len(X_test)
     return [model], [score]
     
 def create_method_evaluator(method, metrics_functions):
