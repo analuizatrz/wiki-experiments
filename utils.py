@@ -39,3 +39,18 @@ def get_X_y_without_duplicates(dataset, feature_columns, target_column):
     filtered = dataset[columns].drop_duplicates()
     return get_X_y(filtered, feature_columns, target_column)
 
+def evaluate_functions(functions_dict, y_true, y_pred):
+    return {k: v(y_true, y_pred) for k, v in functions_dict.items()}
+
+def evaluate_method(method, metrics_functions, X_train, y_train, X_test, y_test):
+    model = method.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
+    score = evaluate_functions(metrics_functions, y_test, y_pred)
+    score["número de instâncias"] = len(X_train) + len(X_test)
+    return [model], [score]
+    
+def create_method_evaluator(method, metrics_functions):
+    def F(X_train, y_train, X_test, y_test):
+        return evaluate_method(method, metrics_functions, X_train, y_train, X_test, y_test)
+    return F
+
