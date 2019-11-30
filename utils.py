@@ -21,13 +21,16 @@ def read_dataset():
 
     return dataset
 
+def read_first_column_csv(filename):
+    return list(pd.read_csv(filename, header=None)[0])
 def read_dataset_metadata():
     target_column = pd.read_csv("metadata/target-column", header=None)[0][0]
-    feature_columns = list(pd.read_csv("metadata/features-columns", header=None)[0])
-    feature_columns_with_delta = list(pd.read_csv("metadata/features-columns-with-delta", header=None)[0])
-    feature_columns_only_delta = list(pd.read_csv("metadata/features-columns-only-delta", header=None)[0])
-
-    return target_column, feature_columns, feature_columns_with_delta, feature_columns_only_delta
+    feature_columns = read_first_column_csv("metadata/features-columns")
+    feature_columns_with_delta = read_first_column_csv("metadata/features-columns-with-delta")
+    feature_columns_only_delta = read_first_column_csv("metadata/features-columns-only-delta")
+    feature_columns_only_actual = read_first_column_csv("metadata/features-columns-only-actual")
+    
+    return target_column, feature_columns, feature_columns_only_actual, feature_columns_with_delta, feature_columns_only_delta
 
 def get_X_y(dataset, feature_columns, target_column):
     X = dataset[feature_columns]
